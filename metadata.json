@@ -1,0 +1,10 @@
+{
+  "name": "Talk",
+  "description": "Single-window AI study tutor with Chat, Notes, global Textbook, Questions, and layered episodic memory.",
+  "requestFramePermissions": [
+    "microphone"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

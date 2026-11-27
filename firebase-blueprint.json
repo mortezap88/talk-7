@@ -1,0 +1,583 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Private authenticated user profile metadata isolated from public access.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "maxLength": 128
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "maxLength": 320
+        },
+        "displayName": {
+          "type": "string",
+          "maxLength": 160
+        },
+        "photoURL": {
+          "type": "string",
+          "maxLength": 1024
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["uid", "email", "displayName", "photoURL", "createdAt", "updatedAt"]
+    },
+    "AppSettingsDoc": {
+      "title": "AppSettingsDoc",
+      "description": "User application settings including model, thinking level, theme, and study subjects.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "maxLength": 128
+        },
+        "provider": {
+          "type": "string",
+          "enum": ["gemini"],
+          "maxLength": 16
+        },
+        "geminiModel": {
+          "type": "string",
+          "enum": ["gemini-4-hydrogen", "gemini-3.5-flash-lite", "gemini-3.8-flash"],
+          "maxLength": 40
+        },
+        "thinkingLevel": {
+          "type": "string",
+          "enum": ["low", "medium", "high", "xhigh"],
+          "maxLength": 16
+        },
+        "themeMode": {
+          "type": "string",
+          "enum": ["system", "light", "dark"],
+          "maxLength": 16
+        },
+        "subjects": {
+          "type": "array"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "userId",
+        "provider",
+        "geminiModel",
+        "thinkingLevel",
+        "themeMode",
+        "subjects",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "ChatDoc": {
+      "title": "ChatDoc",
+      "description": "Top-level study chat session metadata owned by a user.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "maxLength": 128
+        },
+        "userId": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "maxLength": 128
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "messageCount": {
+          "type": "number"
+        },
+        "updatedAtMs": {
+          "type": "number"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["id", "userId", "title", "messageCount", "updatedAtMs", "createdAt", "updatedAt"]
+    },
+    "ChatMessageDoc": {
+      "title": "ChatMessageDoc",
+      "description": "Individual message inside a study chat subcollection.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "maxLength": 128
+        },
+        "userId": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "maxLength": 128
+        },
+        "chatId": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "maxLength": 128
+        },
+        "role": {
+          "type": "string",
+          "enum": ["user", "assistant", "system"],
+          "maxLength": 16
+        },
+        "content": {
+          "type": "string",
+          "maxLength": 200000
+        },
+        "createdAtMs": {
+          "type": "number"
+        },
+        "attachments": {
+          "type": "array"
+        },
+        "candidate": {
+          "type": "array"
+        },
+        "candidateState": {
+          "type": "string",
+          "enum": ["active", "resolved"],
+          "maxLength": 16
+        },
+        "memoryStage": {
+          "type": "number"
+        },
+        "tokenUsage": {
+          "type": "object"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["id", "userId", "chatId", "role", "content", "createdAtMs", "createdAt", "updatedAt"]
+    },
+    "NoteDoc": {
+      "title": "NoteDoc",
+      "description": "Per-chat study notes document.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "maxLength": 128
+        },
+        "chatId": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "maxLength": 128
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 300
+        },
+        "body": {
+          "type": "string",
+          "maxLength": 300000
+        },
+        "tags": {
+          "type": "array"
+        },
+        "images": {
+          "type": "array"
+        },
+        "updatedAtMs": {
+          "type": "number"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["userId", "chatId", "title", "body", "tags", "images", "updatedAtMs", "createdAt", "updatedAt"]
+    },
+    "TextbookDoc": {
+      "title": "TextbookDoc",
+      "description": "Per-chat structured textbook paper layout and text blocks.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "maxLength": 128
+        },
+        "chatId": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "maxLength": 128
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 300
+        },
+        "body": {
+          "type": "string",
+          "maxLength": 400000
+        },
+        "images": {
+          "type": "array"
+        },
+        "convertedBlocks": {
+          "type": "array"
+        },
+        "sourcePageCount": {
+          "type": "number"
+        },
+        "updatedAtMs": {
+          "type": "number"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "userId",
+        "chatId",
+        "title",
+        "body",
+        "images",
+        "convertedBlocks",
+        "sourcePageCount",
+        "updatedAtMs",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "TextbookFigureDoc": {
+      "title": "TextbookFigureDoc",
+      "description": "Individual figure asset belonging to a chat textbook.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "maxLength": 128
+        },
+        "userId": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "maxLength": 128
+        },
+        "chatId": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "maxLength": 128
+        },
+        "code": {
+          "type": "string",
+          "maxLength": 32
+        },
+        "pageNumber": {
+          "type": "number"
+        },
+        "caption": {
+          "type": "string",
+          "maxLength": 2000
+        },
+        "image": {
+          "type": "object"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["id", "userId", "chatId", "pageNumber", "caption", "image", "createdAt", "updatedAt"]
+    },
+    "StoredQuestionDoc": {
+      "title": "StoredQuestionDoc",
+      "description": "Saved study question associated with a chat.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "maxLength": 128
+        },
+        "userId": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "maxLength": 128
+        },
+        "chatId": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "maxLength": 128
+        },
+        "question": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 10000
+        },
+        "answer": {
+          "type": "string",
+          "maxLength": 20000
+        },
+        "flashcardId": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "maxLength": 128
+        },
+        "createdAtMs": {
+          "type": "number"
+        },
+        "updatedAtMs": {
+          "type": "number"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "userId",
+        "chatId",
+        "question",
+        "answer",
+        "createdAtMs",
+        "updatedAtMs",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "ChatMemoryDoc": {
+      "title": "ChatMemoryDoc",
+      "description": "Rolling memory packs and compaction state for a chat.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "maxLength": 128
+        },
+        "chatId": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "maxLength": 128
+        },
+        "version": {
+          "type": "number"
+        },
+        "compactedCount": {
+          "type": "number"
+        },
+        "compactedTokens": {
+          "type": "number"
+        },
+        "epoch": {
+          "type": "number"
+        },
+        "learnerState": {
+          "type": "array"
+        },
+        "packs": {
+          "type": "array"
+        },
+        "condensedArchive": {
+          "type": "string",
+          "maxLength": 100000
+        },
+        "lastError": {
+          "type": "string",
+          "maxLength": 1000
+        },
+        "updatedAtMs": {
+          "type": "number"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "userId",
+        "chatId",
+        "version",
+        "compactedCount",
+        "compactedTokens",
+        "epoch",
+        "learnerState",
+        "packs",
+        "updatedAtMs",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "FlashcardDoc": {
+      "title": "FlashcardDoc",
+      "description": "User flashcard synced with saved study questions.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "maxLength": 128
+        },
+        "userId": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "maxLength": 128
+        },
+        "chatId": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "maxLength": 128
+        },
+        "questionId": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9_\\-]+$",
+          "maxLength": 128
+        },
+        "question": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 10000
+        },
+        "answer": {
+          "type": "string",
+          "maxLength": 20000
+        },
+        "type": {
+          "type": "string",
+          "enum": ["EXAM"],
+          "maxLength": 16
+        },
+        "status": {
+          "type": "string",
+          "enum": ["NEW", "LEARNING", "MASTERED"],
+          "maxLength": 16
+        },
+        "subject": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "createdAtMs": {
+          "type": "number"
+        },
+        "updatedAtMs": {
+          "type": "number"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "userId",
+        "chatId",
+        "questionId",
+        "question",
+        "answer",
+        "type",
+        "status",
+        "subject",
+        "createdAtMs",
+        "updatedAtMs",
+        "createdAt",
+        "updatedAt"
+      ]
+    }
+  },
+  "firestore": {
+    "/users/{userId}/private/profile": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "Authenticated user's private profile PII (email, displayName, photoURL)."
+    },
+    "/users/{userId}/settings/app": {
+      "schema": { "$ref": "#/entities/AppSettingsDoc" },
+      "description": "User-scoped application settings and study subject list."
+    },
+    "/users/{userId}/chats/{chatId}": {
+      "schema": { "$ref": "#/entities/ChatDoc" },
+      "description": "Study chat session metadata owned by the user."
+    },
+    "/users/{userId}/chats/{chatId}/messages/{messageId}": {
+      "schema": { "$ref": "#/entities/ChatMessageDoc" },
+      "description": "Ordered conversation messages inside a study chat."
+    },
+    "/users/{userId}/chats/{chatId}/workspace/note": {
+      "schema": { "$ref": "#/entities/NoteDoc" },
+      "description": "Study notes associated with a chat."
+    },
+    "/users/{userId}/chats/{chatId}/workspace/textbook": {
+      "schema": { "$ref": "#/entities/TextbookDoc" },
+      "description": "Structured textbook layout blocks and metadata associated with a chat."
+    },
+    "/users/{userId}/chats/{chatId}/textbookFigures/{figureId}": {
+      "schema": { "$ref": "#/entities/TextbookFigureDoc" },
+      "description": "Individual textbook figure images and captions for a chat."
+    },
+    "/users/{userId}/chats/{chatId}/questions/{questionId}": {
+      "schema": { "$ref": "#/entities/StoredQuestionDoc" },
+      "description": "Saved study questions for a chat."
+    },
+    "/users/{userId}/chats/{chatId}/workspace/memory": {
+      "schema": { "$ref": "#/entities/ChatMemoryDoc" },
+      "description": "Compacted rolling memory packs and learner state for a chat."
+    },
+    "/users/{userId}/flashcards/{cardId}": {
+      "schema": { "$ref": "#/entities/FlashcardDoc" },
+      "description": "User flashcards synced with study questions."
+    }
+  }
+}
